@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Manager</title>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/assets/sweetalert/sweetalert2.min.css">
+    <link rel="stylesheet" href="/assets/css/product.css">
+</head>
+
+<body>
+<head>
+    <div class="container-fluid header">
+
+        <div class="row p-4 flex-row-reverse">
+            <div class="col-sm-1" style="margin-right: 100px;">
+                <ul class="nav nav-pills justify-content-end">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg"
+                                 width="40" height="40" class="rounded-circle">
+                        </a>
+                        <ul class="dropdown-menu text-center">
+                            <li class="dropdown-item">
+                                <a href="#" class="text-decoration-none" id="informationProduct">
+                                    <i class="fa fa-history" aria-hidden="true"></i>
+                                    <span>Information</span>
+                                </a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a href="#" class="text-decoration-none" id="createProduct">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span>Add Product</span>
+                                </a>
+                            </li>
+                            <li class="dropdown-item">
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li class="nav-menu">
+                                <a class="dropdown-item" th:href="@{/logout}" >
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                    <span> Log Out</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-1">
+                <ul class="nav nav-pills justify-content-end">
+                    <li class="nav-item dropdown">
+                        <button id="btnShowCart" class="btn btn-outline-light border-0 mt-2">
+                            <i class="fa fa-shopping-cart fs-30" aria-hidden="true"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-3">
+                <div class="" style="position: relative;">
+                    <!--                    <form>-->
+                    <input type="text" class="form-control" id="ipSearch" placeholder="search...">
+                    <!--                    </form>-->
+                    <i class="fa-solid fa-magnifying-glass iconSearch" id="search"></i>
+                </div>
+            </div>
+            <div class="col-sm-6 table-title">
+                <h1>List of Product <i class="fa-solid fa-mobile-screen"></i></h1>
+            </div>
+        </div>
+
+
+    </div>
+</head>
+<div class="cart d_none">
+    <button type="button" class="close btn btn-close btnClose" id="btnClose"></button>
+    <div class="cart-head">
+        <h1>Your cart</h1>
+        <hr>
+    </div>
+    <!--    <div class="cart-item d-flex justify-content-between">-->
+    <!--        <img src="/assets/img/file-sketchup.jpg" alt="img telephone">-->
+    <!--        <div class="cart-item-info">-->
+    <!--            <div class="cart-item-title">-->
+    <!--                <h1>Iphone 6</h1>-->
+    <!--            </div>-->
+    <!--            <div class="cart-item-quantity">-->
+    <!--                <a href="#" id="btnMinus"><i class="fa-solid fa-angle-left"></i></a>-->
+    <!--                <input type="text" id="inputQuantity" value="1" maxlength="2" readonly>-->
+    <!--                <a href="#" id="btnPlus"><i class="fa-solid fa-angle-right"></i></a>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <hr>
+    <div class="container-cartItem">
+    </div>
+    <hr>
+    <div class="pay">
+        <button type="button" class="btnOrder" id="btnCreateOrder">Create Order</button>
+    </div>
+</div>
+</div>
+
+<div class="container">
+    <div class="product" id="productDraw">
+
+    </div>
+</div>
+
+
+<!-- Modal create -->
+<div class="modal fade" id="mdCreate" data-backdrop="static" data-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create Customer</h5>
+                <button type="button" class="close btn btn-close btnClose" data-dismiss="modal" aria-label="Close">
+                    <!-- <i class="fa-solid fa-xmark"></i> -->
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-alert-danger hide"></div>
+                <form id="frmCreate" action="" method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="productName" class="fw-bold">Product Name</label>
+                            <input type="text" id="productName" name="productName" class="form-control">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="file" class="fw-bold">Image</label>
+                            <input type="file" id="file" name="file" class="form-control" accept=".png, .jpg, .jpeg">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="price" class="fw-bold">Price</label>
+                            <input name="price" id="price" class="form-control"/>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="quantity" class="fw-bold">Quantity</label>
+                            <input name="quantity" id="quantity" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <label for="description" class="fw-bold">Description</label>
+                            <textarea id="description" name="description" class="input-group"
+                                      style="width: 100%;"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btnClose" data-dismiss="modal">Close</button>
+                <button type="button" id="btnCreate" class="btn btn-outline-primary">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    Create
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edit -->
+
+<div class="modal fade" id="mdEdit" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Edit information</h5>
+                <button type="button" class="close btn btn-close btnClose" data-dismiss="modal" aria-label="Close">
+                    <!-- <i class="fa-solid fa-xmark"></i> -->
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-alert-danger hide"></div>
+                <input type="hidden" id="productId" name="productId">
+                <form id="frmEdit" action="" method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="productNameEdit" class="fw-bold">Product Name</label>
+                            <input type="text" id="productNameEdit" name="productNameEdit" class="form-control">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="fileEdit" class="fw-bold">Image</label>
+                            <input type="file" id="fileEdit" name="fileEdit" class="form-control"
+                                   accept=".png, .jpg, .jpeg">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="priceEdit" class="fw-bold">Price</label>
+                            <input name="priceEdit" id="priceEdit" class="form-control"/>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="quantityEdit" class="fw-bold">Quantity</label>
+                            <input name="quantityEdit" id="quantityEdit" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <label for="descriptionEdit" class="fw-bold">Description</label>
+                            <textarea id="descriptionEdit" name="descriptionEdit" class="input-group"
+                                      style="width: 100%;"></textarea>
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-outline-secondary btnClose"
+                                        data-dismiss="modal">Close
+                                </button>
+                                <button type="button" id="btnUpdate" class="btn btn-success">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    Save changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/jquery/jquery-v3.6.0.min.js"></script>
+<script type="text/javascript" src="/assets/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="/assets/sweetalert/sweetalert2.all.min.js"></script>
+<script type="text/javascript" src="/assets/jquery/dist/jquery.validate.js"></script>
+<script type="text/javascript" src="/assets/js/product.js"></script>
+
+<script>
+    let frmEdit = $('#frmEdit');
+    let productNameEdit = $('#productNameEdit');
+    let fileEdit = $('#fileEdit');
+    let priceEdit = $('#priceEdit');
+    let quantityEdit = $('#quantityEdit');
+    let descriptionEdit = $('#descriptionEdit');
+    let btnUpdate = $('#btnUpdate');
+    let product = new Product();
+    const BASE_URL_CLOUD_IMAGE = "https://res.cloudinary.com/com-codegym/image/upload";
+    const BASE_SCALE_IMAGE = "c_limit,w_1000,h_700,q_200";
+    let btnSearch = $("#search");
+    // let fileFolder = product.fileFolder;
+    // let fileName = product.fileName;
+    function selectProduct() {
+        $(".content-product").on('click', function () {
+            $(".content-product .gallery-product").find(".select-tab").addClass('d-none').removeClass('btnOpacity');
+            $(this).find(".select-tab").css('opacity', '0');
+            $(this).find(".select-tab").removeClass("d-none").animate({opacity: 1});
+        })
+    }
+
+    function showSuccessAlert(t) {
+        Swal.fire({
+            icon: 'success',
+            title: t,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500
+        })
+    }
+
+    function handleImagePopup() {
+
+        $('.image-popup-vertical-fit').magnificPopup({
+            type: 'image',
+            closeOnContentClick: true,
+            mainClass: 'mfp-img',
+            image: {
+                verticalFit: true
+            },
+            gallery: {
+                enabled: true
+            }
+        });
+
+        $('.popup-youtube, .popup-vimeo, .popup-gmaps').magnificPopup({
+            disableOn: 700,
+            type: 'iframe',
+            mainClass: 'mfp-fade',
+            removalDelay: 160,
+            preloader: false,
+            fixedContentPos: false
+        });
+    }
+
+    function getAllProducts() {
+        return $.ajax({
+            type: "GET",
+            url: "http://localhost:8086/api/products",
+        }).done((data) => {
+            $('#productDraw').empty();
+            $.each(data, (index, item) => {
+                product = item;
+                let image_thumbnail = BASE_URL_CLOUD_IMAGE + "/" + BASE_SCALE_IMAGE + "/" + product.fileFolder + "/" + product.fileName;
+
+                //https://res.cloudinary.com/com-codegym/image/upload / c_limit,w_1000,h_700,q_200 / product.fileFolder / product.fileName;
+                let str = `
+                    <div class="product-item" id="${product.id}">
+                        <div class="content-product">
+                            <div class="image">
+                                <img src="${product.fileUrl}" alt="" width="300" height="200">
+                            </div>
+                            <div class="gallery-product">
+                                <h3>${product.productName}</h3>
+                                <p><b>Price:  ${product.price}</b></p>
+                                <p>Quantity: ${product.quantity}</p>
+                                <div class="select-tab btnOpacity d-none">
+                                    <button type="button" id="btnEdit" class="btn btn-success btn btn-secondary" title="Edit"
+                                aria-hidden="true" data-toggle="modal" data-target="#mdEdit" data-id="${product.id}">Edit</button>
+                            <button type="button" class="btn btn-primary btnOder" data-id="${product.id}">Oder</button>
+                            <button type="button" class="btn btn-danger delete" id="btnDelete" data-id="${product.id}">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                $('#productDraw').prepend(str);
+                showSuccessAlert("Successful data generation !");
+                selectProduct();
+                // removeEvent();
+            });
+
+        }).fail(function () {
+            showErrorAlert("This content has been removed or does not exist");
+        }).always(function () {
+            initEven();
+
+        });
+    }
+
+    function getAllCartItems() {
+        $(".cart-item").remove();
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8086/api/carts", //      http://localhost:8086/api/carts
+        }).done((data) => {
+            let image_thumbnail = BASE_URL_CLOUD_IMAGE + "/" + BASE_SCALE_IMAGE + "/" + product.fileFolder + "/" + product.fileName;
+            $.each(data, (i, item) => {
+                product = item;
+                console.log(product);
+                let str = `
+                    <div class="cart-item d-flex justify-content-between">
+                        <img src="${product.fileUrl}" alt="img telephone">
+                        <div class="cart-item-info">
+                            <div class="cart-item-title">
+                                <h6>${product.productName}</h6>
+                            </div>
+                            <div class="cart-item-quantity">
+                                <a href="#" id="btnMinus" data-id="${product.productId}"><i class="fa-solid fa-angle-left"></i></a>
+                                <input type="text" id="inputQuantity" value="${product.quantity}" maxlength="2" readonly>
+                                <a href="#" id="btnPlus" data-id="${product.productId}"><i class="fa-solid fa-angle-right"></i></a>
+                            </div>
+                        <h5>Price: ${product.price}</h5>
+                        </div>
+                    </div>
+                `;
+                $(".container-cartItem").append(str);
+                removeEvent();
+            })
+        }).fail(function () {
+            showErrorAlert("Not Found - The resource has been removed or does not exist");
+        }).always(function () {
+            initEven()
+        });
+    }
+
+    function removeEvent() {
+        $('.btnClose').off();
+        $('.btnOder').off();
+        $("#btnShowCart").off();
+        $('#createProduct').off();
+        $('#btnCloseCartItem').off();
+        $('#btnEdit').off();
+        $('#btnPlus').off();
+        $('#btnMinus').off();
+        $('#btnClose').off();
+        $('#btnDelete').off();
+    }
+
+    function initEven() {
+        handleShowDeleete();
+        $('.btnClose').on('click', function () {
+            $('#mdCreate').modal('hide');
+            $('#mdEdit').modal('hide');
+        })
+        btnMinus();
+        btnPlus()
+        btnEdit();
+        btnClose();
+        btnOder();
+        btnCloseCartItem();
+        createProduct();
+        btnShowCart();
+    }
+
+    function btnMinus() {
+        $('#btnMinus').on('click', function () {
+            product = new Product();
+            product.id = $(this).data('id');
+            console.log(product.id);
+            $.ajax({
+                headers: {
+                    "accept": "application/json",
+                    "content-type": "application/json"
+                },
+                type: "POST",
+                url: "http://localhost:8086/api/products/minus-cart",
+                data: JSON.stringify(product)
+            }).done((data) => {
+                console.log(data);
+                $(".cart-item").remove();
+                $.each(data, (i, item) => {
+                    product = item;
+                    console.log(product);
+                    let image_thumbnail = BASE_URL_CLOUD_IMAGE + "/" + BASE_SCALE_IMAGE + "/" + product.fileFolder + "/" + product.fileName;
+                    let str = `
+                    <div class="cart-item d-flex justify-content-between">
+                        <img src="${product.fileUrl}" alt="img telephone">
+                        <div class="cart-item-info">
+                            <div class="cart-item-title">
+                                <h6>${product.productName}</h6>
+                            </div>
+                            <div class="cart-item-quantity">
+                                <a href="#" id="btnMinus" data-id="${product.productId}"><i class="fa-solid fa-angle-left"></i></a>
+                                <input type="text" id="inputQuantity" value="${product.quantity}" maxlength="2" readonly>
+                                <a href="#" id="btnPlus" data-id="${product.productId}"><i class="fa-solid fa-angle-right"></i></a>
+                            </div>
+                        <h5>Price: ${product.price}</h5>
+                        </div>
+                    </div>
+                `;
+                    $(".container-cartItem").append(str);
+                    removeEvent();
+                })
+            }).fail(function () {
+                showErrorAlert("Not Found - The resource has been removed or does not exist");
+            }).always(function () {
+                initEven();
+            });
+        })
+    }
+
+    function btnPlus() {
+        $('#btnPlus').on('click', function () {
+            product = new Product();
+            product.id = $(this).data('id');
+            console.log(product.id);
+            $.ajax({
+                headers: {
+                    "accept": "application/json",
+                    "content-type": "application/json"
+                },
+                type: "POST",
+                url: "http://localhost:8086/api/products/add-cart",
+                data: JSON.stringify(product)
+            }).done((data) => {
+                console.log(data);
+                $(".cart-item").remove();
+                $.each(data, (i, item) => {
+                    product = item;
+                    console.log(product);
+                    let image_thumbnail = BASE_URL_CLOUD_IMAGE + "/" + BASE_SCALE_IMAGE + "/" + product.fileFolder + "/" + product.fileName;
+                    let str = `
+                    <div class="cart-item d-flex justify-content-between">
+                        <img src="${product.fileUrl}" alt="img telephone">
+                        <div class="cart-item-info">
+                            <div class="cart-item-title">
+                                <h6>${product.productName}</h6>
+                            </div>
+                            <div class="cart-item-quantity">
+                                <a href="#" id="btnMinus" data-id="${product.productId}"><i class="fa-solid fa-angle-left"></i></a>
+                                <input type="text" id="inputQuantity" value="${product.quantity}" maxlength="2" readonly>
+                                <a href="#" id="btnPlus" data-id="${product.productId}"><i class="fa-solid fa-angle-right"></i></a>
+                            </div>
+                        <h5>Price: ${product.price}</h5>
+                        </div>
+                    </div>
+                `;
+                    $(".container-cartItem").append(str);
+                    removeEvent();
+                })
+            }).fail(function () {
+                showErrorAlert("Not Found - The resource has been removed or does not exist");
+            }).always(function () {
+                initEven();
+            });
+        })
+    }
+
+    function btnEdit() {
+        $('#btnEdit').on('click', function () {
+            $('#mdEdit').modal('show');
+            let productId = $(this).data('id');
+            $('#productId').val(productId);
+            // editProduct(productId);
+        })
+    }
+
+    // function editProduct(productId) {
+    //     return $.ajax({
+    //
+    //         type: "GET",
+    //         url: "http://localhost:8086/api/products/" + productId, //      http://localhost:8086/api/carts
+    //     }).done((data) => {
+    //         let image_thumbnail = BASE_URL_CLOUD_IMAGE + "/" + BASE_SCALE_IMAGE + "/" + product.fileFolder + "/" + product.fileName;
+    //         $.each(data, (i, item) => {
+    //             product = item;
+    //             console.log(product);
+    //             $('#productNameEdit').val(product.productName);
+    //             $('#priceEdit').val(product.price);
+    //             $('#quantityEdit').val(product.quantity);
+    //             $('#descriptionEdit').val(product.description);
+    //             $('#fileEdit').val(product.fileName);
+    //             removeEvent();
+    //         })
+    //     }).fail(function () {
+    //         showErrorAlert("Not Found - The resource has been removed or does not exist");
+    //     }).always(function () {
+    //         initEven()
+    //     });
+    // }
+
+    function btnClose() {
+        $('#btnClose').on('click', function () {
+            $('.cart').animate({left: '1570px'});
+        })
+    }
+
+    function btnOder() {
+        $('.btnOder').on('click', function () {
+            let productId = $(this).data("id");
+            addProductToCard(productId);
+        })
+    }
+
+    function addProductToCard(productId) {
+        product = new Product();
+        product.id = productId;
+
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "POST",
+            url: "http://localhost:8086/api/products/add-cart",
+            data: JSON.stringify(product)
+        }).done((data) => {
+            console.log(data);
+
+            $(".cart-item").remove();
+
+            $.each(data, (i, item) => {
+                product = item;
+                console.log(product);
+                let image_thumbnail = BASE_URL_CLOUD_IMAGE + "/" + BASE_SCALE_IMAGE + "/" + product.fileFolder + "/" + product.fileName;
+                let str = `
+                    <div class="cart-item d-flex justify-content-between">
+                        <img src="${product.fileUrl}" alt="img telephone">
+                        <div class="cart-item-info">
+                            <div class="cart-item-title">
+                                <h6>${product.productName}</h6>
+                            </div>
+                            <div class="cart-item-quantity">
+                                <a href="#" id="btnMinus" data-id="${product.productId}"><i class="fa-solid fa-angle-left"></i></a>
+                                <input type="text" id="inputQuantity" value="${product.quantity}" maxlength="2" readonly>
+                                <a href="#" id="btnPlus" data-id="${product.productId}"><i class="fa-solid fa-angle-right"></i></a>
+                            </div>
+                        <h5>Price: ${product.price}</h5>
+                        </div>
+                    </div>
+                `;
+                $(".container-cartItem").append(str);
+            })
+
+            showSuccessAlert("Thêm sản phẩm vào giỏ hàng thành công");
+
+        }).fail(function () {
+            showErrorAlert("Not Found - The resource has been removed or does not exist");
+        }).always(function () {
+        });
+    }
+
+    function btnCloseCartItem() {
+        $('#btnCloseCartItem').on('click', function () {
+            $(this).parent().remove();
+        })
+    }
+
+    function createProduct() {
+        $('#createProduct').on('click', function () {
+            $('#mdCreate').modal('show');
+        })
+    }
+
+    function btnShowCart() {
+        $("#btnShowCart").on("click", () => {
+            console.log("here")
+            $('.cart').removeClass('d_none');
+            $('.cart').animate({left: '1075px'});
+            getAllCartItems();
+        })
+    }
+
+    $('#btnCreate').on('click', function () {
+
+        let formData = new FormData();
+        formData.append("productName", $('#productName').val().toString());
+        formData.append("price", $('#price').val());
+        formData.append("quantity", $('#quantity').val());
+        formData.append("description", $('#description').val().toString());
+        formData.append("file", $('#file')[0].files[0]);
+
+        $.ajax({
+            type: "POST",
+            contentType: false,
+            cache: false,
+            processData: false,
+            url: "http://localhost:8086/api/products/create",
+            data: formData
+        }).done((data) => {
+            console.log(data)
+            product = data;
+            let image_thumbnail = BASE_URL_CLOUD_IMAGE + "/" + BASE_SCALE_IMAGE + "/" + product.fileFolder + "/" + product.fileName;
+            let str = `
+                <div class="product-item" id="${product.id}">
+                    <div class="content-product">
+                        <div class="image">
+                            <img src="${product.fileUrl}" alt="" width="300" height="200">
+                        </div>
+                        <div class="gallery-product">
+                            <h3>${product.productName}</h3>
+                            <p><b>Price:  ${product.price}</b></p>
+                            <p>Quantity: ${product.quantity}</p>
+                            <div class="select-tab btnOpacity d-none">
+                                <button type="button" id="btnEdit" class="btn btn-success btn btn-secondary" title="Edit"
+                                aria-hidden="true" data-toggle="modal" data-target="#mdEdit" data-id="${product.id}">Edit</button>
+                            <button type="button" class="btn btn-primary btnOder" data-id="${product.id}">Oder</button>
+                            <button type="button" class="btn btn-danger delete" id="btnDelete" data-id="${product.id}">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            $('#productDraw').prepend(str);
+            showSuccessAlert("Successful data generation !");
+            selectProduct();
+            initEven();
+        }).fail((err) => {
+            console.log("loi create");
+            showErrorAlert("This content has been removed or does not exist");
+        }).always(function () {
+            $('#mdCreate').modal('hide');
+            $("#frmCreate")[0].reset();
+            // page.element.loader.addClass("hide");
+            // page.element.btnSave.prop('disabled', false);
+            console.log(formData);
+        });
+    })
+
+    btnUpdate.on('click', function () {
+        let productId = $('#productId').val();
+
+        let formData = new FormData();
+        formData.append("productName", productNameEdit.val().toString());
+        formData.append("price", priceEdit.val());
+        formData.append("quantity", quantityEdit.val());
+        formData.append("description", descriptionEdit.val().toString());
+        formData.append("file", fileEdit[0].files[0]);
+
+        $.ajax({
+            type: "POST",
+            contentType: false,
+            cache: false,
+            processData: false,
+            url: "http://localhost:8086/api/products/edit/" + productId,
+            data: formData
+        }).done((data) => {
+            console.log(data)
+            product = data;
+            let image_thumbnail = BASE_URL_CLOUD_IMAGE + "/" + BASE_SCALE_IMAGE + "/" + product.fileFolder + "/" + product.fileName;
+            $('#' + product.id).empty();
+            let str = `
+                <div class="product-item" id="${product.id}">
+                    <div class="content-product">
+                        <div class="image">
+                            <img src="${image_thumbnail}" alt="image product" width="300" height="200">
+                        </div>
+                        <div class="gallery-product">
+                            <h3>${product.productName}</h3>
+                            <p><b>Price:  ${product.price}</b></p>
+                            <p>Quantity: ${product.quantity}</p>
+                            <div class="select-tab btnOpacity d-none">
+                                <button type="button" id="btnEdit" class="btn btn-success btn btn-secondary" title="Edit"
+                                aria-hidden="true" data-toggle="modal" data-target="#mdEdit" data-id="${product.id}">Edit</button>
+                            <button type="button" class="btn btn-primary btnOder" data-id="${product.id}">Oder</button>
+                            <button type="button" class="btn btn-danger delete" id="btnDelete" data-id="${product.id}">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            $("#" + product.id).replaceWith(str);
+            showSuccessAlert("Successful data generation !");
+            selectProduct();
+            initEven();
+        }).fail((err) => {
+            console.log("error edit");
+            showErrorAlert("This content has been removed or does not exist");
+        }).always(function () {
+            $('#mdEdit').modal('hide');
+            $("#frmEdit")[0].reset();
+            // page.element.loader.addClass("hide");
+            // page.element.btnSave.prop('disabled', false);
+            console.log(formData);
+        });
+    })
+
+    $("#btnCreateOrder").on('click', () => {
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "POST",
+            url: "http://localhost:8086/api/carts/create-order",  // http://localhost:8086/api/carts/create-order
+        }).done((data) => {
+
+            let obj = data;
+            if (obj.success) {
+                showSuccessAlert("Tạo đơn hàng thành công");
+
+                $(".cart-item").empty();
+            }
+
+        }).fail(function () {
+            showErrorAlert("Not Found - The resource has been removed or does not exist");
+        }).always(function () {
+
+        });
+    })
+
+    function handleShowDeleete() {
+        $('#btnDelete').on('click', function () {
+            let productId = $(this).data('id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        headers: {
+                            "accept": "application/json",
+                            "content-type": "application/json"
+                        },
+                        type: "DELETE",
+                        url: "http://localhost:8086/api/products/delete/" + productId
+                    })
+                        .done(() => {
+                            $("#" + productId).remove();
+                            Swal.fire({
+                                title: "The client has been deleted.",
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                position: 'top-end',
+                            })
+                            initEven();
+                            selectProduct();
+                        })
+                        .fail((jqXHR) => {
+                            console.log(jqXHR);
+                        })
+                }
+            })
+        })
+    }
+
+    function showErrorAlert(t) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Warning',
+            text: t,
+        })
+    }
+
+    btnSearch.on('click', function () {
+        let search = $('#ipSearch').val();  // http://localhost:8086/api/products?producName=a
+        if (search === "") {
+            getAllProducts();
+        } else {
+            $.ajax({
+                headers: {
+                    "accept": "application/json",
+                    "content-type": "application/json"
+                },
+                type: "GET",
+                url: "http://localhost:8086/api/products/search/" + search,
+            }).done((data) => {
+                console.log(data);
+
+                $('#productDraw').empty();
+
+                $.each(data, (i, item) => {
+                    product = item;
+                    console.log(product);
+                    let image_thumbnail = BASE_URL_CLOUD_IMAGE + "/" + BASE_SCALE_IMAGE + "/" + product.fileFolder + "/" + product.fileName;
+                    let str = `
+                        <div class="product-item" id="${product.id}">
+                            <div class="content-product">
+                                <div class="image">
+                                    <img src="${product.fileUrl}" alt="" width="300" height="200">
+                                </div>
+                                <div class="gallery-product">
+                                    <h3>${product.productName}</h3>
+                                    <p><b>Price:  ${product.price}</b></p>
+                                    <p>Quantity: ${product.quantity}</p>
+                                    <div class="select-tab btnOpacity d-none">
+                                        <button type="button" id="btnEdit" class="btn btn-success btn btn-secondary" title="Edit"
+                                    aria-hidden="true" data-toggle="modal" data-target="#mdEdit" data-id="${product.id}">Edit</button>
+                                <button type="button" class="btn btn-primary btnOder" data-id="${product.id}">Oder</button>
+                                <button type="button" class="btn btn-danger delete" id="btnDelete" data-id="${product.id}">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    $('#productDraw').prepend(str);
+                })
+                showSuccessAlert("result search!");
+            }).fail(function () {
+                showErrorAlert("Not Found - The resource has been removed or does not exist");
+            }).always(function () {
+            });
+        }
+    })
+    getAllProducts();
+</script>
+</body>
+</html>

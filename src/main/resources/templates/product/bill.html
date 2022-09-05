@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/assets/sweetalert/sweetalert2.min.css">
+    <link rel="stylesheet" href="/assets/css/product.css">
+    <link rel="stylesheet" href="/assets/css/bill.css">
+</head>
+<body>
+<div class="container-fluid header">
+    <div class="row p-4 flex-row-reverse">
+        <div class="col-sm-2" style="margin-right: 100px;">
+            <ul class="nav nav-pills justify-content-end">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg"
+                             width="40" height="40" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu text-center">
+                        <li class="dropdown-item">
+                            <a href="#" class="text-decoration-none">
+                                <i class="fa fa-history" aria-hidden="true"></i>
+                                <span>Information</span>
+                            </a>
+                        </li>
+                        <li class="dropdown-item">
+                            <a href="#" class="text-decoration-none">
+                                <i class="fa-solid fa-plus"></i>
+                                <span>Add Product</span>
+                            </a>
+                        </li>
+                        <li class="dropdown-item">
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="nav-menu">
+                            <a class="dropdown-item" href="#">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                <span> Log Out</span></a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-3">
+            <div class="" style="position: relative;">
+                <input type="text" class="form-control" id="ipSearch" placeholder="search...">
+                <i class="fa-solid fa-magnifying-glass iconSearch"></i>
+            </div>
+        </div>
+        <div class="col-sm-6 table-title">
+            <h1>List of Product <i class="fa-solid fa-mobile-screen"></i></h1>
+        </div>
+    </div>
+</div>
+<div class="middleCart">
+    <div class="listing-cart">
+        <div class="imgsp">
+            <img src="/assets/img/file-sketchup.jpg" alt="">
+        </div>
+        <div class="hr">
+            <hr>
+        </div>
+        <div class="infosp justify-content-between">
+            <div class="namesp">
+                <h1>Iphone 6</h1>
+            </div>
+            <div class="price">
+                <span>15000 $</span>
+            </div>
+        </div>
+        <div class="hr">
+            <hr>
+        </div>
+        <div class="choose_quantity d-flex justify-content-between">
+            <button type="button" class="close btn btn-close" id="btnCloseCartItem" data-dismiss="modal" aria-label="Close"></button>
+            <div class="quantity-product">
+                <p>Quantity: 10</p>
+            </div>
+            <div class="quantity">
+                <div class="minus">
+                    <a href="#"><i class="fa-solid fa-minus"></i></a>
+                </div>
+                <input type="text" readonly>
+                <div class="plus">
+                    <a href="#"><i class="fa-solid fa-plus"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="choose_quantity d-flex justify-content-between">
+            <button type="button" class="close btn btn-close" id="btnCloseCartItem" data-dismiss="modal" aria-label="Close"></button>
+            <div class="quantity-product">
+                <p>Quantity: 10</p>
+            </div>
+            <div class="quantity">
+                <div class="minus">
+                    <a href="#"><i class="fa-solid fa-minus"></i></a>
+                </div>
+                <input type="text" readonly>
+                <div class="plus">
+                    <a href="#"><i class="fa-solid fa-plus"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="hr">
+            <hr>
+        </div>
+        <div class="pay">
+            <button type="button" id="btnPay" class="btn btn-danger">Pay</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/jquery/jquery-v3.6.0.min.js"></script>
+<script type="text/javascript" src="/assets/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="/assets/sweetalert/sweetalert2.all.min.js"></script>
+<script type="text/javascript" src="/assets/jquery/dist/jquery.validate.js"></script>
+<script>
+    $('#btnCloseCartItem').on('click', function(){
+        $(this).parent().remove();
+    })
+</script>
+</body>
+</html>
